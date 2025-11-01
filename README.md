@@ -1,4 +1,4 @@
-# Terraform Installation Guide
+# Getting Started with Terraform and GCP
 
 ## 1. Download Terraform
 1. Go to the official Terraform releases page:  
