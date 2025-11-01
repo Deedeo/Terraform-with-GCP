@@ -114,11 +114,99 @@ gcloud projects create $PROJECT_ID --name="$PROJECT_NAME"
      gcloud billing projects describe $PROJECT_ID
      ```
 
-## Step 4: Enable GCP APIs(optional)
+
+## Step 4: Enable compute/container APIs in the new google cloud project
 ```bash
 gcloud services enable container.googleapis.com
 gcloud services enable compute.googleapis.com
 ```
+
+---------------------------------------------------
+
+# Teraforming into the Google Cloud
+
+This section shows how to run the Terraform configuration in this repo against a Google Cloud project. It assumes you have completed the earlier steps in this README (Terraform and gcloud installed).
+
+Prerequisites
+- Install the gcloud CLI and initialize it (see earlier section).
+- Ensure you have a GCP project ID and billing enabled for that project.
+
+1) (Optional) Clone the repository
+
+```bash
+# Clone your repo (replace <repo-url> with the repository URL)
+git clone https://github.com/Deedeo/Terraform-with-GCP.git
+
+cd Terraform-with-GCP
+```
+
+2) Configure which GCP project Terraform should use
+
+Set the project ID in an environment variable (example):
+
+```bash
+export TF_VAR_gcp_project="your-gcp-project-id"
+```
+
+Alternatively create a `terraform.tfvars` file in this directory with:
+
+```hcl
+gcp_project = "your-gcp-project-id"
+```
+
+3) Authenticate so Terraform can call GCP APIs
+
+For local testing you can use Application Default Credentials (ADC) from gcloud:
+
+```bash
+gcloud auth application-default login
+```
+
+For automation/CI, create a service account, grant it the necessary IAM roles (for example `roles/compute.admin` and `roles/iam.serviceAccountUser`), download the JSON key, and point Terraform to it:
+
+```bash
+# example: set path to the service account key
+export GOOGLE_APPLICATION_CREDENTIALS="$HOME/path/to/service-account-key.json"
+```
+
+Notes:
+- `gcloud auth login` authorizes gcloud CLI but does not populate ADC; use `gcloud auth application-default login` for ADC.
+- Do not commit service-account JSON keys into source control.
+
+4) Initialize Terraform
+
+```bash
+terraform init
+```
+
+5) See what Terraform will do
+
+```bash
+terraform plan
+```
+
+6) Apply the changes
+
+```bash
+terraform apply
+```
+
+Or run non-interactively:
+
+```bash
+terraform apply -auto-approve
+```
+
+7) Clean up (destroy resources when no longer needed)
+
+```bash
+terraform destroy
+```
+
+
+
+
+
 
 
 
