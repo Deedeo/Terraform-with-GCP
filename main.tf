@@ -16,7 +16,7 @@ resource "google_compute_instance" "web-server" {
   machine_type = "e2-micro"
   boot_disk {
     initialize_params {
-        image = "ubuntu-os-cloud/ubuntu-1804-lts"
+        image = "ubuntu-os-cloud/ubuntu-2204-jammy-v20240927"
     }
   }
   network_interface {
@@ -38,8 +38,9 @@ resource "google_compute_firewall" "allow_http" {
     protocol = "tcp"
 
   }
-  source_tags = ["tcp-rule"]
-  target_tags = ["allow-http"]
+
+  source_ranges = ["0.0.0.0/0"]
+  target_tags = ["gcp-tf"]
   priority = 1000
 }
 
